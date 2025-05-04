@@ -48,11 +48,11 @@ class MyWindow(QMainWindow):
         set_interval(self.imprimeMilisegundos, 1)
 
     def redesenhaTudo(self):
-        #self.s2vermelho = 0
-        #self.s1amarelo = 1
-        #self.repaint()
-        ms = time.time()*1000.0
-        print(ms) 
+        self.s2vermelho = 0
+        self.s1amarelo = 1
+        self.repaint()
+        #ms = time.time()*1000.0
+        #print(ms) 
 
 
     def paintEvent(self, paintEvent):
@@ -62,7 +62,7 @@ class MyWindow(QMainWindow):
         self.desenhaUmaSinaleira(self.painter, 500, 100, self.s3vermelho, self.s3amarelo, self.s3verde)
         self.desenhaUmaSinaleira(self.painter, 675, 100, self.s4vermelho, self.s4amarelo, self.s4verde)
         self.desenhaUmaSinaleira(self.painter, 850, 100, self.s5vermelho, self.s5amarelo, self.s5verde)
-        #print("REDESENHANDO")
+        print("REDESENHANDO")
         self.painter.end()
 
 
@@ -98,8 +98,55 @@ class MyWindow(QMainWindow):
         self.painter.drawEllipse(QPoint(x+50,y+300), 50, 50)
 
     def imprimeMilisegundos(self):
+        
+        listaComValores = []
+        #LE TUDO DE UMA VEZ. NO COMECO, TEM UNS LOADS, ENTRY, MODE DEVIDO AO RESET DO ESP
         while ser.in_waiting:
-            print(ser.readline())
+            texto = ser.readline().decode("utf-8").replace("\r\n", "") #converte byte em string
+            listaComValores = texto.split(" ")
+            print(listaComValores)
+            print("Tamanho: ")
+            print(len(listaComValores))
+        if (len(listaComValores) != 15): return; #SE NAO FOR UMA MENSAGEM SERIAL COM OS 15 VALORES, NAO EXECUTAR O RESTO DA FUNCAO
+        if (listaComValores[0] == "1"): self.s1vermelho = 1
+        else: self.s1vermelho = 0
+        if (listaComValores[1] == "1"): self.s1amarelo = 1
+        else: self.s1amarelo = 0
+        if (listaComValores[2] == "1"): self.s1verde = 1
+        else: self.s1verde = 0
+
+        if (listaComValores[3] == "1"): self.s2vermelho = 1
+        else: self.s2vermelho = 0
+        if (listaComValores[4] == "1"): self.s2amarelo = 1
+        else: self.s2amarelo = 0
+        if (listaComValores[5] == "1"): self.s2verde = 1
+        else: self.s2verde = 0
+
+        if (listaComValores[6] == "1"): self.s3vermelho = 1
+        else: self.s3vermelho = 0
+        if (listaComValores[7] == "1"): self.s3amarelo = 1
+        else: self.s3amarelo = 0
+        if (listaComValores[8] == "1"): self.s3verde = 1
+        else: self.s3verde = 0
+
+        if (listaComValores[9] == "1"): self.s4vermelho = 1
+        else: self.s4vermelho = 0
+        if (listaComValores[10] == "1"): self.s4amarelo = 1
+        else: self.s4amarelo = 0
+        if (listaComValores[11] == "1"): self.s4verde = 1
+        else: self.s4verde = 0
+
+        if (listaComValores[12] == "1"): self.s5vermelho = 1
+        else: self.s5vermelho = 0
+        if (listaComValores[13] == "1"): self.s5amarelo = 1
+        else: self.s5amarelo = 0
+        if (listaComValores[14] == "1"): self.s5verde = 1
+        else: self.s5verde = 0
+            
+
+        self.repaint()
+        print("CHEGUEI AQUI... depois do repaint()!")
+
         #bs = ser.readline()
         #print(bs)
         #ms = time.time()*1000.0
