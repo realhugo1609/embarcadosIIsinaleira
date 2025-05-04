@@ -28,7 +28,7 @@ class MyWindow(QMainWindow):
         self.setGeometry(200,200,1100,600)
         self.setWindowTitle("Supervisório Sinaleira")
         self.meuBotao = QPushButton("teste", self)
-        self.meuBotao.clicked.connect(self.redesenhaTudo)
+        self.meuBotao.clicked.connect(self.estadoAtencao)
         #TODOS OS SINAIS
         self.s1vermelho  = 0
         self.s1amarelo   = 0
@@ -47,10 +47,11 @@ class MyWindow(QMainWindow):
         self.s5verde     = 1
         set_interval(self.imprimeMilisegundos, 1)
 
-    def redesenhaTudo(self):
-        self.s2vermelho = 0
-        self.s1amarelo = 1
-        self.repaint()
+    def estadoAtencao(self):
+        #self.s2vermelho = 0
+        #self.s1amarelo = 1
+        #self.repaint()
+        ser.write(b'i') 
 
 
     def paintEvent(self, paintEvent):
