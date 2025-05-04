@@ -33,7 +33,7 @@ class MyWindow(QMainWindow):
         self.s1vermelho  = 0
         self.s1amarelo   = 0
         self.s1verde     = 0
-        self.s2vermelho  = 1
+        self.s2vermelho  = 0
         self.s2amarelo   = 0
         self.s2verde     = 0
         self.s3vermelho  = 0
@@ -43,8 +43,8 @@ class MyWindow(QMainWindow):
         self.s4amarelo   = 0
         self.s4verde     = 0
         self.s5vermelho  = 0
-        self.s5amarelo   = 1
-        self.s5verde     = 1
+        self.s5amarelo   = 0
+        self.s5verde     = 0
         set_interval(self.imprimeMilisegundos, 1)
 
     def estadoAtencao(self):
@@ -140,7 +140,7 @@ class MyWindow(QMainWindow):
         if (listaComValores[14] == "1"): self.s5verde = 1
         else: self.s5verde = 0
             
-        self.repaint()
+        self.update()
       
 app = QApplication(sys.argv)
 window = MyWindow()

@@ -27,6 +27,7 @@ uint8_t tempo = 1;
 unsigned int timer = millis();
 unsigned int duracao = 10000;
 bool flagPedestre = false; //PRA VER SE O BOTAO DO PEDESTRE ESTA SENDO APERTADO
+bool estadoDeAlerta = false;
 uint8_t qtdIteracoes = 6; //6 EH SEM SEMAFOROS DO PEDESTRE... 8 EH COM
 
 
@@ -72,14 +73,19 @@ void loop() {
       teste[indice] = Serial.read();
       indice++;
     }
-    //Serial.print("recebi: ");
-    //Serial.println(teste);
+
+    if (teste[0] == 105) 
+    { 
+      if (estadoDeAlerta) 
+      {
+        estadoDeAlerta = false;
+        tempo = 0;  //PARA COMECAR DO ESTADO 1
+      } else estadoDeAlerta = true;
+      teste[0] = 0;   //PRA CONDICAO SER FALSA, PRA NAO SE REPETIR SEMPRE
+    }
+
   }
-  if (teste[0] == 105) 
-  { 
-    tempo = 1;
-    teste[0] = 0;   //PRA CONDICAO SER FALSA, PRA NAO SE REPETIR SEMPRE
-  }
+
   
   
 
@@ -108,113 +114,40 @@ void loop() {
 
 void setaSinais()
 {
-  switch(tempo)
+
+  if (estadoDeAlerta)  //ESTADOD E ALERTA LIGADO (2 OPCOES)
   {
-    case 1:                            //1º TEMPO
-      duracao = 10000;
+
+    if (digitalRead(pinos1amarelo))  //TOGGLE NOS SINAIS AMARELOS
+    {
+      duracao = 1000;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
-      digitalWrite(pinos1amarelo, LOW); //AMARELO
-      digitalWrite(pinos1verde, HIGH); //VERDE
-      digitalWrite(pinos2vermelho, LOW); //VERMELHO
-      digitalWrite(pinos2amarelo, LOW); //AMARELO
-      digitalWrite(pinos2verde, HIGH); //VERDE
-      digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos3amarelo, LOW); //AMARELO
-      digitalWrite(pinos3verde, LOW); //VERDE
-      digitalWrite(pinos4vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos4amarelo, LOW); //AMARELO
-      digitalWrite(pinos4verde, LOW); //VERDE
-      digitalWrite(pinos5vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, LOW); //VERDE
-      imprimeSinais();
-      break;
-    case 2:                        //TRANSITORIO DO 1 PRO 2
-      duracao = 2000;
-      digitalWrite(pinos1vermelho, LOW); //VERMELHO
-      digitalWrite(pinos1amarelo, HIGH); //AMARELO
-      digitalWrite(pinos1verde, LOW); //VERDE
-      digitalWrite(pinos2vermelho, LOW); //VERMELHO
-      digitalWrite(pinos2amarelo, LOW); //AMARELO
-      digitalWrite(pinos2verde, HIGH); //VERDE
-      digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos3amarelo, LOW); //AMARELO
-      digitalWrite(pinos3verde, LOW); //VERDE
-      digitalWrite(pinos4vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos4amarelo, LOW); //AMARELO
-      digitalWrite(pinos4verde, LOW); //VERDE
-      digitalWrite(pinos5vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, LOW); //VERDE
-      imprimeSinais();
-      break;
-    case 3:                             //2º TEMPO
-      duracao = 10000;
-      digitalWrite(pinos1vermelho, HIGH); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
       digitalWrite(pinos1verde, LOW); //VERDE
       digitalWrite(pinos2vermelho, LOW); //VERMELHO
       digitalWrite(pinos2amarelo, LOW); //AMARELO
-      digitalWrite(pinos2verde, HIGH); //VERDE
+      digitalWrite(pinos2verde, LOW); //VERDE
       digitalWrite(pinos3vermelho, LOW); //VERMELHO
       digitalWrite(pinos3amarelo, LOW); //AMARELO
-      digitalWrite(pinos3verde, HIGH); //VERDE
-      digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+      digitalWrite(pinos3verde, LOW); //VERDE
+      digitalWrite(pinos4vermelho, LOW); //VERMELHO
       digitalWrite(pinos4amarelo, LOW); //AMARELO
       digitalWrite(pinos4verde, LOW); //VERDE
       digitalWrite(pinos5vermelho, LOW); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, HIGH); //VERDE
+      digitalWrite(pinos5verde, LOW); //VERDE
       imprimeSinais();
-      break;
-    case 4:                             //TRANSITORIO DO 2 PRO 3
-      duracao = 2000;
-      digitalWrite(pinos1vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos1amarelo, LOW); //AMARELO
+    } else  //TOGGLE NOS SINAIS AMARELOS
+    {
+      duracao = 1000;
+      digitalWrite(pinos1vermelho, LOW); //VERMELHO
+      digitalWrite(pinos1amarelo, HIGH); //AMARELO
       digitalWrite(pinos1verde, LOW); //VERDE
       digitalWrite(pinos2vermelho, LOW); //VERMELHO
       digitalWrite(pinos2amarelo, HIGH); //AMARELO
       digitalWrite(pinos2verde, LOW); //VERDE
       digitalWrite(pinos3vermelho, LOW); //VERMELHO
       digitalWrite(pinos3amarelo, HIGH); //AMARELO
-      digitalWrite(pinos3verde, LOW); //VERDE
-      digitalWrite(pinos4vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos4amarelo, LOW); //AMARELO
-      digitalWrite(pinos4verde, LOW); //VERDE
-      digitalWrite(pinos5vermelho, LOW); //VERMELHO
-      digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, HIGH); //VERDE
-      imprimeSinais();
-      break;
-    case 5:                             //3º TEMPO
-      duracao = 10000;
-      digitalWrite(pinos1vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos1amarelo, LOW); //AMARELO
-      digitalWrite(pinos1verde, LOW); //VERDE
-      digitalWrite(pinos2vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos2amarelo, LOW); //AMARELO
-      digitalWrite(pinos2verde, LOW); //VERDE
-      digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos3amarelo, LOW); //AMARELO
-      digitalWrite(pinos3verde, LOW); //VERDE
-      digitalWrite(pinos4vermelho, LOW); //VERMELHO
-      digitalWrite(pinos4amarelo, LOW); //AMARELO
-      digitalWrite(pinos4verde, HIGH); //VERDE
-      digitalWrite(pinos5vermelho, LOW); //VERMELHO
-      digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, HIGH); //VERDE
-      imprimeSinais();
-      break;
-    case 6:                             //TRANSITORIO DO 3 PRO 1
-      duracao = 2000;
-      digitalWrite(pinos1vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos1amarelo, LOW); //AMARELO
-      digitalWrite(pinos1verde, LOW); //VERDE
-      digitalWrite(pinos2vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos2amarelo, LOW); //AMARELO
-      digitalWrite(pinos2verde, LOW); //VERDE
-      digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos3amarelo, LOW); //AMARELO
       digitalWrite(pinos3verde, LOW); //VERDE
       digitalWrite(pinos4vermelho, LOW); //VERMELHO
       digitalWrite(pinos4amarelo, HIGH); //AMARELO
@@ -223,48 +156,171 @@ void setaSinais()
       digitalWrite(pinos5amarelo, HIGH); //AMARELO
       digitalWrite(pinos5verde, LOW); //VERDE
       imprimeSinais();
-      break;
- 
-    case 7:                             //CHAVE PEDESTRE
-      duracao = 10000;
-      digitalWrite(pinos1vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos1amarelo, LOW); //AMARELO
-      digitalWrite(pinos1verde, LOW); //VERDE
-      digitalWrite(pinos2vermelho, LOW); //VERMELHO
-      digitalWrite(pinos2amarelo, LOW); //AMARELO
-      digitalWrite(pinos2verde, HIGH); //VERDE
-      digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos3amarelo, LOW); //AMARELO
-      digitalWrite(pinos3verde, LOW); //VERDE
-      digitalWrite(pinos4vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos4amarelo, LOW); //AMARELO
-      digitalWrite(pinos4verde, LOW); //VERDE
-      digitalWrite(pinos5vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, LOW); //VERDE
-      imprimeSinais();
-      break;
+    }
 
-    case 8:                             //TRANSITORIO DA CHAVE PEDESTRE PRO 1
-      duracao = 2000;
-      qtdIteracoes = 6; //DEPOIS DO SEMAFORO DO PEDESTRE, VOLTAR PROS ESTADOS NORMAIS, SEM O SEMAFORO DO PEDESTRE
-      digitalWrite(pinos1vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos1amarelo, LOW); //AMARELO
-      digitalWrite(pinos1verde, LOW); //VERDE
-      digitalWrite(pinos2vermelho, LOW); //VERMELHO
-      digitalWrite(pinos2amarelo, HIGH); //AMARELO
-      digitalWrite(pinos2verde, LOW); //VERDE
-      digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos3amarelo, LOW); //AMARELO
-      digitalWrite(pinos3verde, LOW); //VERDE
-      digitalWrite(pinos4vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos4amarelo, LOW); //AMARELO
-      digitalWrite(pinos4verde, LOW); //VERDE
-      digitalWrite(pinos5vermelho, HIGH); //VERMELHO
-      digitalWrite(pinos5amarelo, LOW); //AMARELO
-      digitalWrite(pinos5verde, LOW); //VERDE
-      imprimeSinais();
-      break;
+
+
+  } else //ESTADO DE ALERTA DESLIGADO
+  {
+
+    switch(tempo)
+    {
+      case 1:                            //1º TEMPO
+        duracao = 10000;
+        digitalWrite(pinos1vermelho, LOW); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, HIGH); //VERDE
+        digitalWrite(pinos2vermelho, LOW); //VERMELHO
+        digitalWrite(pinos2amarelo, LOW); //AMARELO
+        digitalWrite(pinos2verde, HIGH); //VERDE
+        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, LOW); //VERDE
+        imprimeSinais();
+        break;
+      case 2:                        //TRANSITORIO DO 1 PRO 2
+        duracao = 2000;
+        digitalWrite(pinos1vermelho, LOW); //VERMELHO
+        digitalWrite(pinos1amarelo, HIGH); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, LOW); //VERMELHO
+        digitalWrite(pinos2amarelo, LOW); //AMARELO
+        digitalWrite(pinos2verde, HIGH); //VERDE
+        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, LOW); //VERDE
+        imprimeSinais();
+        break;
+      case 3:                             //2º TEMPO
+        duracao = 10000;
+        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, LOW); //VERMELHO
+        digitalWrite(pinos2amarelo, LOW); //AMARELO
+        digitalWrite(pinos2verde, HIGH); //VERDE
+        digitalWrite(pinos3vermelho, LOW); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, HIGH); //VERDE
+        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, LOW); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, HIGH); //VERDE
+        imprimeSinais();
+        break;
+      case 4:                             //TRANSITORIO DO 2 PRO 3
+        duracao = 2000;
+        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, LOW); //VERMELHO
+        digitalWrite(pinos2amarelo, HIGH); //AMARELO
+        digitalWrite(pinos2verde, LOW); //VERDE
+        digitalWrite(pinos3vermelho, LOW); //VERMELHO
+        digitalWrite(pinos3amarelo, HIGH); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, LOW); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, HIGH); //VERDE
+        imprimeSinais();
+        break;
+      case 5:                             //3º TEMPO
+        duracao = 10000;
+        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos2amarelo, LOW); //AMARELO
+        digitalWrite(pinos2verde, LOW); //VERDE
+        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, LOW); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, HIGH); //VERDE
+        digitalWrite(pinos5vermelho, LOW); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, HIGH); //VERDE
+        imprimeSinais();
+        break;
+      case 6:                             //TRANSITORIO DO 3 PRO 1
+        duracao = 2000;
+        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos2amarelo, LOW); //AMARELO
+        digitalWrite(pinos2verde, LOW); //VERDE
+        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, LOW); //VERMELHO
+        digitalWrite(pinos4amarelo, HIGH); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, LOW); //VERMELHO
+        digitalWrite(pinos5amarelo, HIGH); //AMARELO
+        digitalWrite(pinos5verde, LOW); //VERDE
+        imprimeSinais();
+        break;
+  
+      case 7:                             //CHAVE PEDESTRE
+        duracao = 10000;
+        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, LOW); //VERMELHO
+        digitalWrite(pinos2amarelo, LOW); //AMARELO
+        digitalWrite(pinos2verde, HIGH); //VERDE
+        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, LOW); //VERDE
+        imprimeSinais();
+        break;
+
+      case 8:                             //TRANSITORIO DA CHAVE PEDESTRE PRO 1
+        duracao = 2000;
+        qtdIteracoes = 6; //DEPOIS DO SEMAFORO DO PEDESTRE, VOLTAR PROS ESTADOS NORMAIS, SEM O SEMAFORO DO PEDESTRE
+        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos1amarelo, LOW); //AMARELO
+        digitalWrite(pinos1verde, LOW); //VERDE
+        digitalWrite(pinos2vermelho, LOW); //VERMELHO
+        digitalWrite(pinos2amarelo, HIGH); //AMARELO
+        digitalWrite(pinos2verde, LOW); //VERDE
+        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos3amarelo, LOW); //AMARELO
+        digitalWrite(pinos3verde, LOW); //VERDE
+        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos4amarelo, LOW); //AMARELO
+        digitalWrite(pinos4verde, LOW); //VERDE
+        digitalWrite(pinos5vermelho, HIGH); //VERMELHO
+        digitalWrite(pinos5amarelo, LOW); //AMARELO
+        digitalWrite(pinos5verde, LOW); //VERDE
+        imprimeSinais();
+        break;
+    }
   }
 }
 
