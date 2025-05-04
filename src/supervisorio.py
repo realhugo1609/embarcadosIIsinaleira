@@ -51,8 +51,6 @@ class MyWindow(QMainWindow):
         self.s2vermelho = 0
         self.s1amarelo = 1
         self.repaint()
-        #ms = time.time()*1000.0
-        #print(ms) 
 
 
     def paintEvent(self, paintEvent):
@@ -65,9 +63,7 @@ class MyWindow(QMainWindow):
         print("REDESENHANDO")
         self.painter.end()
 
-
     def desenhaUmaSinaleira(self, painter, x, y, vermelho, amarelo, verde, semaforo):
-
         self.painter.setFont(QFont("Arial", 40))
         self.minhaPen = QPen(Qt.black, 2)
         self.painter.setPen(self.minhaPen)
@@ -99,7 +95,6 @@ class MyWindow(QMainWindow):
         self.painter.drawEllipse(QPoint(x+50,y+300), 50, 50)
 
     def imprimeMilisegundos(self):
-        
         listaComValores = []
         #LE TUDO DE UMA VEZ. NO COMECO, TEM UNS LOADS, ENTRY, MODE DEVIDO AO RESET DO ESP
         while ser.in_waiting:
@@ -144,26 +139,9 @@ class MyWindow(QMainWindow):
         if (listaComValores[14] == "1"): self.s5verde = 1
         else: self.s5verde = 0
             
-
         self.repaint()
-        print("CHEGUEI AQUI... depois do repaint()!")
-
-        #bs = ser.readline()
-        #print(bs)
-        #ms = time.time()*1000.0
-        #print(ms)        
-
+      
 app = QApplication(sys.argv)
 window = MyWindow()
-#window = QWidget()
 window.show() 
 app.exec()
-
-
-
-
-'''
-while True:
-  bs = ser.readline()
-  print(bs)
-'''
