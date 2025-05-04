@@ -274,39 +274,42 @@ void setaSinais()
 //MANDAR UM i PELO SERIAL PRA VER TODOS OS ESTADOS DOS SEMAFOROS
 void imprimeSinais()
 {
+  //Serial.println("1 0 1 0 0 1 1 1 0 0 1 0 1 1 0\n");
+
   Serial.print(digitalRead(pinos1vermelho));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos1amarelo));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos1verde));
-  Serial.print(",");
+  Serial.print(" ");
 
   Serial.print(digitalRead(pinos2vermelho));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos2amarelo));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos2verde));
-  Serial.print(",");
+  Serial.print(" ");
 
   Serial.print(digitalRead(pinos3vermelho));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos3amarelo));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos3verde));
-  Serial.print(",");
+  Serial.print(" ");
 
   Serial.print(digitalRead(pinos4vermelho));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos4amarelo));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos4verde));
-  Serial.print(",");
+  Serial.print(" ");
 
   Serial.print(digitalRead(pinos5vermelho));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(digitalRead(pinos5amarelo));
-  Serial.print(",");
+  Serial.print(" ");
   Serial.println(digitalRead(pinos5verde));
+
 
 /*  
   Serial.print("s1: " );

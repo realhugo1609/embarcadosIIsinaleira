@@ -7,7 +7,20 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 import sys
+import time
+import threading
 
+import serial
+ser = serial.Serial("COM5", 115200)
+
+
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -20,28 +33,26 @@ class MyWindow(QMainWindow):
         self.s1vermelho  = 0
         self.s1amarelo   = 0
         self.s1verde     = 0
-
         self.s2vermelho  = 1
         self.s2amarelo   = 0
         self.s2verde     = 0
-
         self.s3vermelho  = 0
         self.s3amarelo   = 0
         self.s3verde     = 0
-
         self.s4vermelho  = 0
         self.s4amarelo   = 0
         self.s4verde     = 0
-
         self.s5vermelho  = 0
         self.s5amarelo   = 1
         self.s5verde     = 1
+        set_interval(self.imprimeMilisegundos, 1)
 
     def redesenhaTudo(self):
-        #self.meuX = self.meuX + 37    #teste... muda a posicao da sinaleira
-        self.s2vermelho = 0
-        self.s1amarelo = 1
-        self.repaint()
+        #self.s2vermelho = 0
+        #self.s1amarelo = 1
+        #self.repaint()
+        ms = time.time()*1000.0
+        print(ms) 
 
 
     def paintEvent(self, paintEvent):
@@ -86,10 +97,25 @@ class MyWindow(QMainWindow):
         self.painter.setPen(self.minhaPen)
         self.painter.drawEllipse(QPoint(x+50,y+300), 50, 50)
 
-        
+    def imprimeMilisegundos(self):
+        while ser.in_waiting:
+            print(ser.readline())
+        #bs = ser.readline()
+        #print(bs)
+        #ms = time.time()*1000.0
+        #print(ms)        
 
 app = QApplication(sys.argv)
 window = MyWindow()
 #window = QWidget()
 window.show() 
 app.exec()
+
+
+
+
+'''
+while True:
+  bs = ser.readline()
+  print(bs)
+'''
