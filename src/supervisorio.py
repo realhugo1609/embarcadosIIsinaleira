@@ -28,7 +28,7 @@ class MyWindow(QMainWindow):
         self.setGeometry(200,200,1100,600)
         self.setWindowTitle("Supervisório Sinaleira")
         self.meuBotao = QPushButton("teste", self)
-        self.meuBotao.clicked.connect(self.redesenhaTudo)
+        self.meuBotao.clicked.connect(self.estadoAtencao)
         #TODOS OS SINAIS
         self.s1vermelho  = 0
         self.s1amarelo   = 0
@@ -47,33 +47,31 @@ class MyWindow(QMainWindow):
         self.s5verde     = 1
         set_interval(self.imprimeMilisegundos, 1)
 
-    def redesenhaTudo(self):
-        self.s2vermelho = 0
-        self.s1amarelo = 1
-        self.repaint()
-        #ms = time.time()*1000.0
-        #print(ms) 
+    def estadoAtencao(self):
+        #self.s2vermelho = 0
+        #self.s1amarelo = 1
+        #self.repaint()
+        ser.write(b'i') 
 
 
     def paintEvent(self, paintEvent):
         self.painter = QPainter(self)
-        self.desenhaUmaSinaleira(self.painter, 150, 100, self.s1vermelho, self.s1amarelo, self.s1verde)
-        self.desenhaUmaSinaleira(self.painter, 325, 100, self.s2vermelho, self.s2amarelo, self.s2verde)
-        self.desenhaUmaSinaleira(self.painter, 500, 100, self.s3vermelho, self.s3amarelo, self.s3verde)
-        self.desenhaUmaSinaleira(self.painter, 675, 100, self.s4vermelho, self.s4amarelo, self.s4verde)
-        self.desenhaUmaSinaleira(self.painter, 850, 100, self.s5vermelho, self.s5amarelo, self.s5verde)
+        self.desenhaUmaSinaleira(self.painter, 150, 100, self.s1vermelho, self.s1amarelo, self.s1verde, "s1")
+        self.desenhaUmaSinaleira(self.painter, 325, 100, self.s2vermelho, self.s2amarelo, self.s2verde, "s2")
+        self.desenhaUmaSinaleira(self.painter, 500, 100, self.s3vermelho, self.s3amarelo, self.s3verde, "s3")
+        self.desenhaUmaSinaleira(self.painter, 675, 100, self.s4vermelho, self.s4amarelo, self.s4verde, "s4")
+        self.desenhaUmaSinaleira(self.painter, 850, 100, self.s5vermelho, self.s5amarelo, self.s5verde, "s5")
         print("REDESENHANDO")
         self.painter.end()
 
-
-    def desenhaUmaSinaleira(self, painter, x, y, vermelho, amarelo, verde):
-
-        self.painter.setFont(QFont("Arial", 30))
+    def desenhaUmaSinaleira(self, painter, x, y, vermelho, amarelo, verde, semaforo):
+        self.painter.setFont(QFont("Arial", 40))
+        self.minhaPen = QPen(Qt.black, 2)
+        self.painter.setPen(self.minhaPen)
+        self.painter.drawText(QPoint(x+25,y-10), semaforo)
 
         self.myBrush = QBrush()
-        self.minhaPen = QPen(Qt.black, 2)
         self.painter.setBrush(self.myBrush)
-        self.painter.setPen(self.minhaPen)
         self.painter.drawRect(x,y,100,350)
 
         if (vermelho == 1): self.myBrush = QBrush(Qt.red)
@@ -98,7 +96,6 @@ class MyWindow(QMainWindow):
         self.painter.drawEllipse(QPoint(x+50,y+300), 50, 50)
 
     def imprimeMilisegundos(self):
-        
         listaComValores = []
         #LE TUDO DE UMA VEZ. NO COMECO, TEM UNS LOADS, ENTRY, MODE DEVIDO AO RESET DO ESP
         while ser.in_waiting:
@@ -143,26 +140,9 @@ class MyWindow(QMainWindow):
         if (listaComValores[14] == "1"): self.s5verde = 1
         else: self.s5verde = 0
             
-
         self.repaint()
-        print("CHEGUEI AQUI... depois do repaint()!")
-
-        #bs = ser.readline()
-        #print(bs)
-        #ms = time.time()*1000.0
-        #print(ms)        
-
+      
 app = QApplication(sys.argv)
 window = MyWindow()
-#window = QWidget()
 window.show() 
 app.exec()
-
-
-
-
-'''
-while True:
-  bs = ser.readline()
-  print(bs)
-'''

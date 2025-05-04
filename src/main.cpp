@@ -24,7 +24,7 @@ uint8_t s3[3]; //vermelho, amarelo, verde
 uint8_t s4[3]; //vermelho, amarelo, verde
 uint8_t s5[3]; //vermelho, amarelo, verde
 uint8_t tempo = 1;
-unsigned int timer = millis();;
+unsigned int timer = millis();
 unsigned int duracao = 10000;
 bool flagPedestre = false; //PRA VER SE O BOTAO DO PEDESTRE ESTA SENDO APERTADO
 uint8_t qtdIteracoes = 6; //6 EH SEM SEMAFOROS DO PEDESTRE... 8 EH COM
@@ -72,13 +72,13 @@ void loop() {
       teste[indice] = Serial.read();
       indice++;
     }
-    Serial.print("recebi: ");
-    Serial.println(teste);
+    //Serial.print("recebi: ");
+    //Serial.println(teste);
   }
   if (teste[0] == 105) 
   { 
-    imprimeSinais(); //105 = letra i
-    teste[0] = 0;
+    tempo = 1;
+    teste[0] = 0;   //PRA CONDICAO SER FALSA, PRA NAO SE REPETIR SEMPRE
   }
   
   
@@ -92,7 +92,7 @@ void loop() {
     setaSinais();
     timer = millis();
   }
-
+/*
   //VERIFICA SE O BOTAO DO PEDESTRE ESTA SENDO APERTADO
   if (!digitalRead(BOTAO_PEDESTRE)) 
   {
@@ -100,9 +100,6 @@ void loop() {
     flagPedestre = true;
     qtdIteracoes = 8;
   }
-/*
-  Serial.println(  digitalRead(BOTAO_PEDESTRE)   );
-  //delay(500);
 */
 
 
@@ -309,39 +306,5 @@ void imprimeSinais()
   Serial.print(digitalRead(pinos5amarelo));
   Serial.print(" ");
   Serial.println(digitalRead(pinos5verde));
-
-
-/*  
-  Serial.print("s1: " );
-  Serial.print(s1[0]);
-  Serial.print(", ");
-  Serial.print(s1[1]);
-  Serial.print(", ");
-  Serial.println(s1[2]);
-  Serial.print("s2: " );
-  Serial.print(s2[0]);
-  Serial.print(", ");
-  Serial.print(s2[1]);
-  Serial.print(", ");
-  Serial.println(s2[2]);
-  Serial.print("s3: " );
-  Serial.print(s3[0]);
-  Serial.print(", ");
-  Serial.print(s3[1]);
-  Serial.print(", ");
-  Serial.println(s3[2]);
-  Serial.print("s4: " );
-  Serial.print(s4[0]);
-  Serial.print(", ");
-  Serial.print(s4[1]);
-  Serial.print(", ");
-  Serial.println(s4[2]);
-  Serial.print("s5: " );
-  Serial.print(s5[0]);
-  Serial.print(", ");
-  Serial.print(s5[1]);
-  Serial.print(", ");
-  Serial.println(s5[2]);
-*/
 
 }
