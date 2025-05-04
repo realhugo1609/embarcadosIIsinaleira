@@ -57,23 +57,24 @@ class MyWindow(QMainWindow):
 
     def paintEvent(self, paintEvent):
         self.painter = QPainter(self)
-        self.desenhaUmaSinaleira(self.painter, 150, 100, self.s1vermelho, self.s1amarelo, self.s1verde)
-        self.desenhaUmaSinaleira(self.painter, 325, 100, self.s2vermelho, self.s2amarelo, self.s2verde)
-        self.desenhaUmaSinaleira(self.painter, 500, 100, self.s3vermelho, self.s3amarelo, self.s3verde)
-        self.desenhaUmaSinaleira(self.painter, 675, 100, self.s4vermelho, self.s4amarelo, self.s4verde)
-        self.desenhaUmaSinaleira(self.painter, 850, 100, self.s5vermelho, self.s5amarelo, self.s5verde)
+        self.desenhaUmaSinaleira(self.painter, 150, 100, self.s1vermelho, self.s1amarelo, self.s1verde, "s1")
+        self.desenhaUmaSinaleira(self.painter, 325, 100, self.s2vermelho, self.s2amarelo, self.s2verde, "s2")
+        self.desenhaUmaSinaleira(self.painter, 500, 100, self.s3vermelho, self.s3amarelo, self.s3verde, "s3")
+        self.desenhaUmaSinaleira(self.painter, 675, 100, self.s4vermelho, self.s4amarelo, self.s4verde, "s4")
+        self.desenhaUmaSinaleira(self.painter, 850, 100, self.s5vermelho, self.s5amarelo, self.s5verde, "s5")
         print("REDESENHANDO")
         self.painter.end()
 
 
-    def desenhaUmaSinaleira(self, painter, x, y, vermelho, amarelo, verde):
+    def desenhaUmaSinaleira(self, painter, x, y, vermelho, amarelo, verde, semaforo):
 
-        self.painter.setFont(QFont("Arial", 30))
+        self.painter.setFont(QFont("Arial", 40))
+        self.minhaPen = QPen(Qt.black, 2)
+        self.painter.setPen(self.minhaPen)
+        self.painter.drawText(QPoint(x+25,y-10), semaforo)
 
         self.myBrush = QBrush()
-        self.minhaPen = QPen(Qt.black, 2)
         self.painter.setBrush(self.myBrush)
-        self.painter.setPen(self.minhaPen)
         self.painter.drawRect(x,y,100,350)
 
         if (vermelho == 1): self.myBrush = QBrush(Qt.red)
