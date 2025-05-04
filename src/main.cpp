@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "funcoes.h"
 
 #define BOTAO_PEDESTRE    32
 #define pinos1vermelho    4
