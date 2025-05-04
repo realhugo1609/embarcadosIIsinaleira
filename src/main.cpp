@@ -90,8 +90,6 @@ void loop() {
   {
     if (tempo < qtdIteracoes) tempo++;
     else tempo = 1;
-    Serial.print("Tempo: ");
-    Serial.println(tempo);
     setaSinais();
     timer = millis();
   }
@@ -99,7 +97,7 @@ void loop() {
   //VERIFICA SE O BOTAO DO PEDESTRE ESTA SENDO APERTADO
   if (!digitalRead(BOTAO_PEDESTRE)) 
   {
-    Serial.println(digitalRead(BOTAO_PEDESTRE));
+    //Serial.println(digitalRead(BOTAO_PEDESTRE));
     flagPedestre = true;
     qtdIteracoes = 8;
   }
@@ -117,7 +115,6 @@ void setaSinais()
   switch(tempo)
   {
     case 1:                            //1º TEMPO
-      Serial.println("Caso 1");
       duracao = 10000;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
@@ -134,9 +131,9 @@ void setaSinais()
       digitalWrite(pinos5vermelho, HIGH); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, LOW); //VERDE
+      imprimeSinais();
       break;
     case 2:                        //TRANSITORIO DO 1 PRO 2
-      Serial.println("Caso 2");
       duracao = 2000;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
       digitalWrite(pinos1amarelo, HIGH); //AMARELO
@@ -153,9 +150,9 @@ void setaSinais()
       digitalWrite(pinos5vermelho, HIGH); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, LOW); //VERDE
+      imprimeSinais();
       break;
     case 3:                             //2º TEMPO
-      Serial.println("Caso 3");
       duracao = 10000;
       digitalWrite(pinos1vermelho, HIGH); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
@@ -172,9 +169,9 @@ void setaSinais()
       digitalWrite(pinos5vermelho, LOW); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, HIGH); //VERDE
+      imprimeSinais();
       break;
     case 4:                             //TRANSITORIO DO 2 PRO 3
-      Serial.println("Caso 4");
       duracao = 2000;
       digitalWrite(pinos1vermelho, HIGH); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
@@ -191,9 +188,9 @@ void setaSinais()
       digitalWrite(pinos5vermelho, LOW); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, HIGH); //VERDE
+      imprimeSinais();
       break;
     case 5:                             //3º TEMPO
-      Serial.println("Caso 5");
       duracao = 10000;
       digitalWrite(pinos1vermelho, HIGH); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
@@ -210,9 +207,9 @@ void setaSinais()
       digitalWrite(pinos5vermelho, LOW); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, HIGH); //VERDE
+      imprimeSinais();
       break;
     case 6:                             //TRANSITORIO DO 3 PRO 1
-      Serial.println("Caso 6");
       duracao = 2000;
       digitalWrite(pinos1vermelho, HIGH); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
@@ -229,10 +226,10 @@ void setaSinais()
       digitalWrite(pinos5vermelho, LOW); //VERMELHO
       digitalWrite(pinos5amarelo, HIGH); //AMARELO
       digitalWrite(pinos5verde, LOW); //VERDE
+      imprimeSinais();
       break;
  
     case 7:                             //CHAVE PEDESTRE
-      Serial.println("Caso 7");
       duracao = 10000;
       digitalWrite(pinos1vermelho, HIGH); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
@@ -249,10 +246,10 @@ void setaSinais()
       digitalWrite(pinos5vermelho, HIGH); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, LOW); //VERDE
+      imprimeSinais();
       break;
 
     case 8:                             //TRANSITORIO DA CHAVE PEDESTRE PRO 1
-      Serial.println("Caso 8");
       duracao = 2000;
       qtdIteracoes = 6; //DEPOIS DO SEMAFORO DO PEDESTRE, VOLTAR PROS ESTADOS NORMAIS, SEM O SEMAFORO DO PEDESTRE
       digitalWrite(pinos1vermelho, HIGH); //VERMELHO
@@ -270,6 +267,7 @@ void setaSinais()
       digitalWrite(pinos5vermelho, HIGH); //VERMELHO
       digitalWrite(pinos5amarelo, LOW); //AMARELO
       digitalWrite(pinos5verde, LOW); //VERDE
+      imprimeSinais();
       break;
   }
 }
@@ -277,6 +275,41 @@ void setaSinais()
 //MANDAR UM i PELO SERIAL PRA VER TODOS OS ESTADOS DOS SEMAFOROS
 void imprimeSinais()
 {
+  Serial.print(digitalRead(pinos1vermelho));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos1amarelo));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos1verde));
+  Serial.print(",");
+
+  Serial.print(digitalRead(pinos2vermelho));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos2amarelo));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos2verde));
+  Serial.print(",");
+
+  Serial.print(digitalRead(pinos3vermelho));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos3amarelo));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos3verde));
+  Serial.print(",");
+
+  Serial.print(digitalRead(pinos4vermelho));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos4amarelo));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos4verde));
+  Serial.print(",");
+
+  Serial.print(digitalRead(pinos5vermelho));
+  Serial.print(",");
+  Serial.print(digitalRead(pinos5amarelo));
+  Serial.print(",");
+  Serial.println(digitalRead(pinos5verde));
+
+/*  
   Serial.print("s1: " );
   Serial.print(s1[0]);
   Serial.print(", ");
@@ -307,6 +340,6 @@ void imprimeSinais()
   Serial.print(s5[1]);
   Serial.print(", ");
   Serial.println(s5[2]);
-
+*/
 
 }
