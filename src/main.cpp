@@ -27,7 +27,7 @@ uint8_t tempo = 1;
 unsigned int timer = millis();
 unsigned int duracao = 10000;
 bool flagPedestre = false; //PRA VER SE O BOTAO DO PEDESTRE ESTA SENDO APERTADO
-bool estadoDeAlerta = false;
+bool estadoDeAlerta = false;  //UTILIZADO NA FUNCAO setaSinais() 
 uint8_t qtdIteracoes = 6; //6 EH SEM SEMAFOROS DO PEDESTRE... 8 EH COM
 
 
@@ -79,25 +79,23 @@ void loop() {
       if (estadoDeAlerta) 
       {
         estadoDeAlerta = false;
+        flagPedestre = false; //RESETAR ESSA FLAG CASO ELA SEJA VERDADEIRA
+        qtdIteracoes = 6;
         tempo = 0;  //PARA COMECAR DO ESTADO 1
-      } else estadoDeAlerta = true;
+      } else 
+      {
+        estadoDeAlerta = true;
+        flagPedestre = false; //RESETAR ESSA FLAG CASO ELA SEJA VERDADEIRA
+        qtdIteracoes = 6;
+      }
       teste[0] = 0;   //PRA CONDICAO SER FALSA, PRA NAO SE REPETIR SEMPRE
     }
 
   }
 
-
   //HORA DE TROCAR DE TEMPO
   if (millis() > timer + duracao)
   {
-    /*
-    if ((flagPedestre) && ((tempo == 2) || (tempo == 4) || (tempo == 6))) //BOTAO DE PEDESTRE FOI APERTADO, E JA ESTA NA TRANSICAO COM AMARELO
-    {
-      tempo = 7; //PULA PRO ESTADO 7, COM OS SEMAFOROS FECHADOS
-      flagPedestre = false; //PRA VOLTAR PRA NORMALIDADE
-      //qtdIteracoes = 7; 
-    } else 
-    */
     if (tempo < qtdIteracoes) 
     {
       tempo++;
@@ -111,8 +109,10 @@ void loop() {
   if (!digitalRead(BOTAO_PEDESTRE)) 
   {
     //Serial.println(digitalRead(BOTAO_PEDESTRE));
+    Serial.println("botaoapertado");
     flagPedestre = true;
     qtdIteracoes = 7;
+    delay(500);
   }
 
 
@@ -123,7 +123,7 @@ void loop() {
 void setaSinais()
 {
 
-  if (estadoDeAlerta)  //ESTADOD E ALERTA LIGADO (2 OPCOES)
+  if (estadoDeAlerta)  //ESTADO DE ALERTA LIGADO (2 OPCOES)
   {
 
     if (digitalRead(pinos1amarelo))  //TOGGLE NOS SINAIS AMARELOS
@@ -174,7 +174,7 @@ void setaSinais()
     switch(tempo)
     {
       case 1:                            //1º TEMPO
-        duracao = 10000;
+        duracao = 6000;
         digitalWrite(pinos1vermelho, LOW); //VERMELHO
         digitalWrite(pinos1amarelo, LOW); //AMARELO
         digitalWrite(pinos1verde, HIGH); //VERDE
@@ -290,7 +290,7 @@ void setaSinais()
   
       case 7:                             //CHAVE PEDESTRE
         duracao = 10000;
-        qtdIteracoes = 6;
+        qtdIteracoes = 6;    //DIMINUI DE VOLTA A QUANTIDADE DE ITERACOES
         flagPedestre = false;
         digitalWrite(pinos1vermelho, HIGH); //VERMELHO
         digitalWrite(pinos1amarelo, LOW); //AMARELO
