@@ -88,7 +88,6 @@ class MyWindow(QMainWindow):
             self.minhaPen = QPen(Qt.black, 1)
             self.painter.setPen(self.minhaPen)
             self.painter.drawText(QPoint(660,535), "off")
-
         else:
             self.myBrush = QBrush()
             self.minhaPen = QPen(Qt.red, 3, Qt.DotLine)
@@ -139,6 +138,7 @@ class MyWindow(QMainWindow):
 
     def leSerial(self):
         listaComValores = []
+        texto = ""
         #LE TUDO DE UMA VEZ. NO COMECO, TEM UNS LOADS, ENTRY, MODE DEVIDO AO RESET DO ESP
         while ser.in_waiting:
             texto = ser.readline().decode("utf-8").replace("\r\n", "") #converte byte em string
@@ -146,6 +146,9 @@ class MyWindow(QMainWindow):
             print(listaComValores)
             print("Tamanho: ")
             print(len(listaComValores))
+            if (listaComValores[0] == "botaoapertado"): 
+                self.chavePedestre = 0
+                self.update()
         if (len(listaComValores) != 16): return; #SE NAO FOR UMA MENSAGEM SERIAL COM OS 15 VALORES, NAO EXECUTAR O RESTO DA FUNCAO
         if (listaComValores[0] == "1"): self.s1vermelho = 1
         else: self.s1vermelho = 0
