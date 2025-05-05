@@ -64,7 +64,7 @@ int indice = 0;
 
 void loop() {
 
-  //PARA LER ESTADOS ATUAIS DOS LEDS
+  //PARA RECEBER ESTADO DE ALERTA DO SUPERVISORIO
   if (Serial.available() > 0)
   {
     indice = 0;
@@ -86,27 +86,35 @@ void loop() {
 
   }
 
-  
-  
-
 
   //HORA DE TROCAR DE TEMPO
   if (millis() > timer + duracao)
   {
-    if (tempo < qtdIteracoes) tempo++;
-    else tempo = 1;
+    /*
+    if ((flagPedestre) && ((tempo == 2) || (tempo == 4) || (tempo == 6))) //BOTAO DE PEDESTRE FOI APERTADO, E JA ESTA NA TRANSICAO COM AMARELO
+    {
+      tempo = 7; //PULA PRO ESTADO 7, COM OS SEMAFOROS FECHADOS
+      flagPedestre = false; //PRA VOLTAR PRA NORMALIDADE
+      //qtdIteracoes = 7; 
+    } else 
+    */
+    if (tempo < qtdIteracoes) 
+    {
+      tempo++;
+    } else tempo = 1;
+
     setaSinais();
     timer = millis();
   }
-/*
+
   //VERIFICA SE O BOTAO DO PEDESTRE ESTA SENDO APERTADO
   if (!digitalRead(BOTAO_PEDESTRE)) 
   {
     //Serial.println(digitalRead(BOTAO_PEDESTRE));
     flagPedestre = true;
-    qtdIteracoes = 8;
+    qtdIteracoes = 7;
   }
-*/
+
 
 
 }
@@ -120,7 +128,7 @@ void setaSinais()
 
     if (digitalRead(pinos1amarelo))  //TOGGLE NOS SINAIS AMARELOS
     {
-      duracao = 1000;
+      duracao = 500;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
       digitalWrite(pinos1verde, LOW); //VERDE
@@ -139,7 +147,7 @@ void setaSinais()
       imprimeSinais();
     } else  //TOGGLE NOS SINAIS AMARELOS
     {
-      duracao = 1000;
+      duracao = 500;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
       digitalWrite(pinos1amarelo, HIGH); //AMARELO
       digitalWrite(pinos1verde, LOW); //VERDE
@@ -282,33 +290,14 @@ void setaSinais()
   
       case 7:                             //CHAVE PEDESTRE
         duracao = 10000;
+        qtdIteracoes = 6;
+        flagPedestre = false;
         digitalWrite(pinos1vermelho, HIGH); //VERMELHO
         digitalWrite(pinos1amarelo, LOW); //AMARELO
         digitalWrite(pinos1verde, LOW); //VERDE
         digitalWrite(pinos2vermelho, LOW); //VERMELHO
         digitalWrite(pinos2amarelo, LOW); //AMARELO
         digitalWrite(pinos2verde, HIGH); //VERDE
-        digitalWrite(pinos3vermelho, HIGH); //VERMELHO
-        digitalWrite(pinos3amarelo, LOW); //AMARELO
-        digitalWrite(pinos3verde, LOW); //VERDE
-        digitalWrite(pinos4vermelho, HIGH); //VERMELHO
-        digitalWrite(pinos4amarelo, LOW); //AMARELO
-        digitalWrite(pinos4verde, LOW); //VERDE
-        digitalWrite(pinos5vermelho, HIGH); //VERMELHO
-        digitalWrite(pinos5amarelo, LOW); //AMARELO
-        digitalWrite(pinos5verde, LOW); //VERDE
-        imprimeSinais();
-        break;
-
-      case 8:                             //TRANSITORIO DA CHAVE PEDESTRE PRO 1
-        duracao = 2000;
-        qtdIteracoes = 6; //DEPOIS DO SEMAFORO DO PEDESTRE, VOLTAR PROS ESTADOS NORMAIS, SEM O SEMAFORO DO PEDESTRE
-        digitalWrite(pinos1vermelho, HIGH); //VERMELHO
-        digitalWrite(pinos1amarelo, LOW); //AMARELO
-        digitalWrite(pinos1verde, LOW); //VERDE
-        digitalWrite(pinos2vermelho, LOW); //VERMELHO
-        digitalWrite(pinos2amarelo, HIGH); //AMARELO
-        digitalWrite(pinos2verde, LOW); //VERDE
         digitalWrite(pinos3vermelho, HIGH); //VERMELHO
         digitalWrite(pinos3amarelo, LOW); //AMARELO
         digitalWrite(pinos3verde, LOW); //VERDE
