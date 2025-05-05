@@ -27,25 +27,27 @@ class MyWindow(QMainWindow):
         super().__init__()
         self.setGeometry(200,200,1100,600)
         self.setWindowTitle("Supervisório Sinaleira")
-        self.meuBotao = QPushButton("teste", self)
+        self.meuBotao = QPushButton("ALERTA On/Off", self)
+        self.meuBotao.setGeometry(775, 475, 180, 80)
         self.meuBotao.clicked.connect(self.estadoAtencao)
         #TODOS OS SINAIS
-        self.s1vermelho  = 0
-        self.s1amarelo   = 0
-        self.s1verde     = 0
-        self.s2vermelho  = 0
-        self.s2amarelo   = 0
-        self.s2verde     = 0
-        self.s3vermelho  = 0
-        self.s3amarelo   = 0
-        self.s3verde     = 0
-        self.s4vermelho  = 0
-        self.s4amarelo   = 0
-        self.s4verde     = 0
-        self.s5vermelho  = 0
-        self.s5amarelo   = 0
-        self.s5verde     = 0
-        set_interval(self.imprimeMilisegundos, 1)
+        self.s1vermelho     = 0
+        self.s1amarelo      = 0
+        self.s1verde        = 0
+        self.s2vermelho     = 0
+        self.s2amarelo      = 0
+        self.s2verde        = 0
+        self.s3vermelho     = 0
+        self.s3amarelo      = 0
+        self.s3verde        = 0
+        self.s4vermelho     = 0
+        self.s4amarelo      = 0
+        self.s4verde        = 0
+        self.s5vermelho     = 0
+        self.s5amarelo      = 0
+        self.s5verde        = 0
+        self.chavePedestre  = 0
+        set_interval(self.leSerial, 1)
 
     def estadoAtencao(self):
         #self.s2vermelho = 0
@@ -61,8 +63,48 @@ class MyWindow(QMainWindow):
         self.desenhaUmaSinaleira(self.painter, 500, 100, self.s3vermelho, self.s3amarelo, self.s3verde, "s3")
         self.desenhaUmaSinaleira(self.painter, 675, 100, self.s4vermelho, self.s4amarelo, self.s4verde, "s4")
         self.desenhaUmaSinaleira(self.painter, 850, 100, self.s5vermelho, self.s5amarelo, self.s5verde, "s5")
+        self.desenhaChavePedestre(self.painter, self.chavePedestre)
         print("REDESENHANDO")
         self.painter.end()
+
+    def desenhaChavePedestre(self, painter, chave):
+        self.painter.setFont(QFont("Arial", 40))
+        self.minhaPen = QPen(Qt.black, 2)
+        self.painter.setPen(self.minhaPen)
+        self.painter.drawText(QPoint(150,550), "Chave pedestre:")
+
+        if (chave == 1): 
+            self.myBrush = QBrush(Qt.red)
+            self.minhaPen = QPen(Qt.red, 3, Qt.DotLine)
+            self.painter.setBrush(self.myBrush)
+            self.painter.setPen(self.minhaPen)
+            self.painter.drawEllipse(QPoint(670,530), 25, 25)
+            self.myBrush = QBrush()
+            self.minhaPen = QPen(Qt.green, 3, Qt.DotLine)
+            self.painter.setBrush(self.myBrush)
+            self.painter.setPen(self.minhaPen)
+            self.painter.drawEllipse(QPoint(735,530), 25, 25)
+            self.painter.setFont(QFont("Arial", 10))
+            self.minhaPen = QPen(Qt.black, 1)
+            self.painter.setPen(self.minhaPen)
+            self.painter.drawText(QPoint(660,535), "off")
+
+        else:
+            self.myBrush = QBrush()
+            self.minhaPen = QPen(Qt.red, 3, Qt.DotLine)
+            self.painter.setBrush(self.myBrush)
+            self.painter.setPen(self.minhaPen)
+            self.painter.drawEllipse(QPoint(670,530), 25, 25)
+            self.myBrush = QBrush(Qt.green)
+            self.minhaPen = QPen(Qt.green, 3, Qt.DotLine)
+            self.painter.setBrush(self.myBrush)
+            self.painter.setPen(self.minhaPen)
+            self.painter.drawEllipse(QPoint(735,530), 25, 25)
+            self.painter.setFont(QFont("Arial", 10))
+            self.minhaPen = QPen(Qt.black, 1)
+            self.painter.setPen(self.minhaPen)
+            self.painter.drawText(QPoint(725,535), "on")
+
 
     def desenhaUmaSinaleira(self, painter, x, y, vermelho, amarelo, verde, semaforo):
         self.painter.setFont(QFont("Arial", 40))
@@ -95,7 +137,7 @@ class MyWindow(QMainWindow):
         self.painter.setPen(self.minhaPen)
         self.painter.drawEllipse(QPoint(x+50,y+300), 50, 50)
 
-    def imprimeMilisegundos(self):
+    def leSerial(self):
         listaComValores = []
         #LE TUDO DE UMA VEZ. NO COMECO, TEM UNS LOADS, ENTRY, MODE DEVIDO AO RESET DO ESP
         while ser.in_waiting:
@@ -104,7 +146,7 @@ class MyWindow(QMainWindow):
             print(listaComValores)
             print("Tamanho: ")
             print(len(listaComValores))
-        if (len(listaComValores) != 15): return; #SE NAO FOR UMA MENSAGEM SERIAL COM OS 15 VALORES, NAO EXECUTAR O RESTO DA FUNCAO
+        if (len(listaComValores) != 16): return; #SE NAO FOR UMA MENSAGEM SERIAL COM OS 15 VALORES, NAO EXECUTAR O RESTO DA FUNCAO
         if (listaComValores[0] == "1"): self.s1vermelho = 1
         else: self.s1vermelho = 0
         if (listaComValores[1] == "1"): self.s1amarelo = 1
@@ -139,6 +181,9 @@ class MyWindow(QMainWindow):
         else: self.s5amarelo = 0
         if (listaComValores[14] == "1"): self.s5verde = 1
         else: self.s5verde = 0
+
+        if (listaComValores[15] == "1"): self.chavePedestre = 1
+        else: self.chavePedestre = 0
             
         self.update()
       

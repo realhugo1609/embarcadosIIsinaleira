@@ -128,7 +128,7 @@ void setaSinais()
 
     if (digitalRead(pinos1amarelo))  //TOGGLE NOS SINAIS AMARELOS
     {
-      duracao = 500;
+      duracao = 1000;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
       digitalWrite(pinos1amarelo, LOW); //AMARELO
       digitalWrite(pinos1verde, LOW); //VERDE
@@ -147,7 +147,7 @@ void setaSinais()
       imprimeSinais();
     } else  //TOGGLE NOS SINAIS AMARELOS
     {
-      duracao = 500;
+      duracao = 1000;
       digitalWrite(pinos1vermelho, LOW); //VERMELHO
       digitalWrite(pinos1amarelo, HIGH); //AMARELO
       digitalWrite(pinos1verde, LOW); //VERDE
@@ -317,6 +317,8 @@ void setaSinais()
 void imprimeSinais()
 {
   //Serial.println("1 0 1 0 0 1 1 1 0 0 1 0 1 1 0\n");
+  int chavePedestreApertada = 0;
+  if (!flagPedestre) chavePedestreApertada = 1;
 
   Serial.print(digitalRead(pinos1vermelho));
   Serial.print(" ");
@@ -350,6 +352,9 @@ void imprimeSinais()
   Serial.print(" ");
   Serial.print(digitalRead(pinos5amarelo));
   Serial.print(" ");
-  Serial.println(digitalRead(pinos5verde));
+  Serial.print(digitalRead(pinos5verde));
+
+  Serial.print(" ");
+  Serial.println(chavePedestreApertada);
 
 }
